@@ -4,7 +4,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -39,7 +41,7 @@ public class ChallengesSqlite {
 	}
 	
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, SQLException {
 		
 		
 		//Get read source file
@@ -64,29 +66,30 @@ public class ChallengesSqlite {
 		FileHandler fh = new FileHandler(savePath + fileName + ".log");
 		logger.addHandler(fh);
 		fh.setFormatter(new SimpleFormatter());
-		
-		
 		int numberRecord = 0;
 		int numberFailed = 0;
 		int numberSuccessful = 0;
-		while(csvUserIterator.hasNext()) {
-			CsvUser user = csvUserIterator.next();
-			if(user.isEndLine()==false) {
-				if(user.isBad()) {
-//					System.out.println(Arrays.toString(user.getInfo()));
+		
+		//Create SQLite database file
+		String my_database_url = "jdbc:sqlite:" + savePath + fileName +".db";
+		Connection conn = DriverManager.getConnection(my_database_url);
+		
+//		while(csvUserIterator.hasNext()) {
+//			CsvUser user = csvUserIterator.next();
+//			if(user.isEndLine()==false) {
+//				if(user.isBad()) {
 //					csvWriter.writeNext(user.getInfo());
-					numberFailed +=1;
-				}
-				numberRecord +=1;
-			}
-		}
+//					numberFailed +=1;
+//				}
+//				numberRecord +=1;
+//			}
+//		}
 		
 		numberSuccessful = numberRecord - numberFailed;
 		
 		logger.info("\nTotal Received: "+numberRecord+"\nNumber of Failed: "+numberFailed+"\nNumber of Successful: "+numberSuccessful);
 
-		
-//		System.out.print("Total Received: "+numberRecord+"\nNumber of Failed: "+numberFailed+"\nNumber of Successful: "+numberSuccessful);
+
 		csvWriter.close();
 
 	}
