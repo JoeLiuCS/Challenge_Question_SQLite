@@ -15,11 +15,11 @@ public class ChallengesSqlite {
 	final private static String[] header = {"A", "B", "C", "D","E","F","G","H","I","J"};
 	
 	//Path for save result
-	final private static String savePath = "/Users/shuoqiaoliu/eclipse-workspace/my_challenges/src/main/resources/";
+	final private static String savePath = "/Users/shuoqiaoliu/git/Challenge_Question_SQLite/my_challenges/src/main/resources/";
 	
 	//Change source files path if you need.
 	final private static String sourceFilePath = 
-			"/Users/shuoqiaoliu/eclipse-workspace/my_challenges/src/main/resources/Entry Level Coding Challenge Page 2.csv";
+			"/Users/shuoqiaoliu/git/Challenge_Question_SQLite/my_challenges/src/main/resources/Entry Level Coding Challenge Page 2.csv";
 	
 	final private static String fileName = getFileName();
 	/*
