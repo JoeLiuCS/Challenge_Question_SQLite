@@ -6,11 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;
@@ -41,6 +39,61 @@ public class ChallengesSqlite {
 	}
 	
 	
+	
+	
+	
+	
+	private Connection connect() {
+		//Create SQLite database file
+		String my_database_url = "jdbc:sqlite:" + savePath + fileName +".db";
+		
+		String sql = "CREATE TABLE IF NOT EXISTS mychallengetable (\n"
+				+"    A text PRIMARY KEY,\n"	
+				+ "    B text NOT NULL,\n"
+				+ "    C text NOT NULL,\n"
+				+ "    D text NOT NULL,\n"
+				+ "    E text NOT NULL,\n"
+				+ "    F text NOT NULL,\n"
+				+ "    G text NOT NULL,\n"
+				+ "    H text NOT NULL,\n"
+				+ "    I text NOT NULL,\n"
+				+ "    J text NOT NULL,\n"
+				+ ");";
+		
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(my_database_url);
+			
+		}catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return conn;
+	}
+	
+	public void insertToDatabase(String[] info) {
+		String sql = "INSERT INTO" + "(A,B,C,D,E,F,G,H,I,J) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			
+			for(int i=0;i<info.length;i++) {
+				pstmt.setString(i+1, info[i]);
+			}
+            
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) throws IOException, SQLException {
 		
 		
@@ -56,41 +109,45 @@ public class ChallengesSqlite {
 		
 		
 		//Create writer to store all the bad records 
-		Writer writer = Files.newBufferedWriter(Paths.get(savePath + fileName + "-bad.csv"));
-		CSVWriter csvWriter = new CSVWriter(writer);
-		//Writer header
-		csvWriter.writeNext(header);
+//		Writer writer = Files.newBufferedWriter(Paths.get(savePath + fileName + "-bad.csv"));
+//		CSVWriter csvWriter = new CSVWriter(writer);
+//		//Writer header
+//		csvWriter.writeNext(header);
 		
-		//Create Log file
-		Logger logger = Logger.getLogger(ChallengesSqlite.class.getName());
-		FileHandler fh = new FileHandler(savePath + fileName + ".log");
-		logger.addHandler(fh);
-		fh.setFormatter(new SimpleFormatter());
+		CsvCreator myCsvCreator = new CsvCreator(fileName,savePath);
+		
 		int numberRecord = 0;
 		int numberFailed = 0;
 		int numberSuccessful = 0;
+//		
+		//Create SQLite database
+//		ChallengesSqlite runSQL = new ChallengesSqlite();
 		
-		//Create SQLite database file
-		String my_database_url = "jdbc:sqlite:" + savePath + fileName +".db";
-		Connection conn = DriverManager.getConnection(my_database_url);
-		
-//		while(csvUserIterator.hasNext()) {
-//			CsvUser user = csvUserIterator.next();
-//			if(user.isEndLine()==false) {
-//				if(user.isBad()) {
+		while(csvUserIterator.hasNext()) {
+			CsvUser user = csvUserIterator.next();
+			if(user.isEndLine()==false) {
+				
+				if(user.isBad()) { //If it is bad record, csv will copy this to file.
 //					csvWriter.writeNext(user.getInfo());
-//					numberFailed +=1;
+					myCsvCreator.writeIn(user.getInfo());
+					numberFailed +=1;
+				}
+//				else {// If it is good record, database fille will take it
+//					runSQL.insertToDatabase(user.getInfo());
 //				}
-//				numberRecord +=1;
-//			}
-//		}
+				numberRecord +=1;
+			}
+
+		}
 		
 		numberSuccessful = numberRecord - numberFailed;
 		
-		logger.info("\nTotal Received: "+numberRecord+"\nNumber of Failed: "+numberFailed+"\nNumber of Successful: "+numberSuccessful);
-
-
-		csvWriter.close();
+		LogCreator lgCreator = new LogCreator(numberRecord,numberFailed,numberSuccessful);
+		lgCreator.createLog(fileName, savePath);
+		
+//		csvWriter.close();
+		
+		myCsvCreator.closeCsv();
 
 	}
 	
