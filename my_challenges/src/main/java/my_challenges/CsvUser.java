@@ -97,5 +97,10 @@ public class CsvUser {
 
 		return result;
 	}
+	
+	public boolean isEndLine() {
+		return A==null && B==null && C==null && D==null && E==null &&
+				F==null && G==null && H==null && I==null && J==null;
+	}
 
 }

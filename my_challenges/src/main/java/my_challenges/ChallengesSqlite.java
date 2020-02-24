@@ -6,11 +6,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 public class ChallengesSqlite {
+	
 	
 	final private static String[] header = {"A", "B", "C", "D","E","F","G","H","I","J"};
 	
@@ -22,12 +27,14 @@ public class ChallengesSqlite {
 			"/Users/shuoqiaoliu/git/Challenge_Question_SQLite/my_challenges/src/main/resources/Entry Level Coding Challenge Page 2.csv";
 	
 	final private static String fileName = getFileName();
-	/*
+	/* 
 	 * Get file name by given sourceFilePath
 	 */
 	private static String getFileName() {
+		//Get String -> "Entry Level Coding Challenge Page 2.csv"
 		String[] temp = sourceFilePath.split("/");
 		String fileName = temp[temp.length-1];
+		//Return String -> "Entry Level Coding Challenge Page 2"
 		return fileName.substring(0, fileName.length()-4);
 	}
 	
@@ -41,7 +48,6 @@ public class ChallengesSqlite {
 				.withType(CsvUser.class)
 				.withIgnoreLeadingWhiteSpace(true)
 				.build();
-		
 		//The source file will be extremely large, 
 		//Use Iterator only read one bean at a time.
 		Iterator<CsvUser> csvUserIterator = csvToBean.iterator();
@@ -50,21 +56,37 @@ public class ChallengesSqlite {
 		//Create writer to store all the bad records 
 		Writer writer = Files.newBufferedWriter(Paths.get(savePath + fileName + "-bad.csv"));
 		CSVWriter csvWriter = new CSVWriter(writer);
-		
 		//Writer header
 		csvWriter.writeNext(header);
 		
+		//Create Log file
+		Logger logger = Logger.getLogger(ChallengesSqlite.class.getName());
+		FileHandler fh = new FileHandler(savePath + fileName + ".log");
+		logger.addHandler(fh);
+		fh.setFormatter(new SimpleFormatter());
+		
+		
+		int numberRecord = 0;
+		int numberFailed = 0;
+		int numberSuccessful = 0;
 		while(csvUserIterator.hasNext()) {
 			CsvUser user = csvUserIterator.next();
-			
-			if(user.isBad()) {
-				System.out.println(Arrays.toString(user.getInfo()));
-				csvWriter.writeNext(user.getInfo());
-			
+			if(user.isEndLine()==false) {
+				if(user.isBad()) {
+//					System.out.println(Arrays.toString(user.getInfo()));
+//					csvWriter.writeNext(user.getInfo());
+					numberFailed +=1;
+				}
+				numberRecord +=1;
 			}
-			
 		}
 		
+		numberSuccessful = numberRecord - numberFailed;
+		
+		logger.info("\nTotal Received: "+numberRecord+"\nNumber of Failed: "+numberFailed+"\nNumber of Successful: "+numberSuccessful);
+
+		
+//		System.out.print("Total Received: "+numberRecord+"\nNumber of Failed: "+numberFailed+"\nNumber of Successful: "+numberSuccessful);
 		csvWriter.close();
 
 	}
