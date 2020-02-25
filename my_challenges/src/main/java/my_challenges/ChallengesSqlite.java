@@ -3,9 +3,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Iterator;
 
@@ -23,18 +20,6 @@ public class ChallengesSqlite {
 			"/Users/shuoqiaoliu/git/Challenge_Question_SQLite/my_challenges/src/main/resources/Entry Level Coding Challenge Page 2.csv";
 	
 	final private static String fileName = getFileName();
-	/* 
-	 * Get file name by given sourceFilePath
-	 */
-	private static String getFileName() {
-		//Get String -> "Entry Level Coding Challenge Page 2.csv"
-		String[] temp = sourceFilePath.split("/");
-		String fileName = temp[temp.length-1];
-		//Return String -> "Entry Level Coding Challenge Page 2"
-		return fileName.substring(0, fileName.length()-4);
-	}
-	
-	
 	
 	
 	
@@ -59,19 +44,20 @@ public class ChallengesSqlite {
 		int numberFailed = 0;
 //		
 		//Create SQLite database
-//		ChallengesSqlite runSQL = new ChallengesSqlite();
+		SQLiteCreator my_sqlite = new SQLiteCreator(fileName,savePath);
+		my_sqlite.createNewDatabase();
 		
 		while(csvUserIterator.hasNext()) {
 			CsvUser user = csvUserIterator.next();
 			if(user.isEndLine()==false) {
 				
-				if(user.isBad()) { //If it is bad record, csv will copy this to file.
+				if(user.isBad()) { //If it is bad record, CSV will copy this to file.
 					myCsvCreator.writeIn(user.getInfo());
 					numberFailed +=1;
 				}
-//				else {// If it is good record, database fille will take it
-//					runSQL.insertToDatabase(user.getInfo());
-//				}
+				else {// If it is good record, database file will take it
+					my_sqlite.insert(user.getInfo());
+				}
 				numberRecord +=1;
 			}
 
@@ -84,6 +70,17 @@ public class ChallengesSqlite {
 		
 		myCsvCreator.closeCsv();
 
+	}
+	
+	/* 
+	 * Get file name by given sourceFilePath
+	 */
+	private static String getFileName() {
+		//Get String -> "Entry Level Coding Challenge Page 2.csv"
+		String[] temp = sourceFilePath.split("/");
+		String fileName = temp[temp.length-1];
+		//Return String -> "Entry Level Coding Challenge Page 2"
+		return fileName.substring(0, fileName.length()-4);
 	}
 	
 
