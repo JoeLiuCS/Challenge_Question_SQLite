@@ -17,7 +17,7 @@ public class CsvCreator {
 	private Writer writer;
 	private CSVWriter csvWriter;
 	
-	public CsvCreator(String newFileName , String savePath , String[] newHeader) {
+	public CsvCreator(String newFileName, String savePath, String[] newHeader) {
 		header = newHeader;
 		try {
 			writer = Files.newBufferedWriter(Paths.get(savePath + newFileName + "-bad.csv"));

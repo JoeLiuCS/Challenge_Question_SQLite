@@ -36,24 +36,23 @@ public class ChallengesSqlite {
 		String [] nextLine;
 		
 		//Write all the bad records 
-		CsvCreator myCsvCreator = new CsvCreator(fileName,savePath,fileHeader);
+		CsvCreator myCsvCreator = new CsvCreator(fileName, savePath, fileHeader);
 		
 		//Create SQLite database
-		SQLiteCreator mySQLite = new SQLiteCreator(fileName,savePath,fileHeader);
+		SQLiteCreator mySQLite = new SQLiteCreator(fileName, savePath, fileHeader);
 		mySQLite.createNewDatabase();
 		
 		int totalOfRecord = 0;
 		int numberOfFailed = 0;
 		
+		System.out.println("Code is runging...");
 		while((nextLine=reader.readNext())!=null) {
 			if(! isEndLine(nextLine)) {
 				if(isBadRecord(nextLine)) {
 					myCsvCreator.writeIn(nextLine);
-					System.out.println("Find a failed record");
 					numberOfFailed += 1;
 				}
 				else {
-					System.out.println("Insert to table");
 					mySQLite.insert(nextLine);
 				}
 				totalOfRecord += 1;
@@ -62,9 +61,10 @@ public class ChallengesSqlite {
 		
 		myCsvCreator.closeCsv();
 		reader.close();
+		System.out.println("Finished!");
 		
 		int numberOfSuccessful = totalOfRecord - numberOfFailed;
-		LogCreator lgCreator = new LogCreator(totalOfRecord,numberOfFailed,numberOfSuccessful);
+		LogCreator lgCreator = new LogCreator(totalOfRecord, numberOfFailed, numberOfSuccessful);
 		lgCreator.createLog(fileName, savePath);
 				
 	}

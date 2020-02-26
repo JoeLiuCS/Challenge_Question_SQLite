@@ -14,7 +14,7 @@ public class SQLiteCreator {
 	private String my_database_url;
 	private String[] header;
 	
-	public SQLiteCreator(String newFileName , String path , String[] newHeader){
+	public SQLiteCreator(String newFileName, String path, String[] newHeader){
 		fileName = newFileName;
 		savePath = path;
 		header = newHeader;
@@ -52,12 +52,12 @@ public class SQLiteCreator {
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
         	// Only record the information that match to header.
         	// Extra Columns will ignore.
-            for(int i=0;i<header.length;i++) { 
-            	pstmt.setString(i+1, info[i]);
+            for(int i=0; i<header.length; i++) { 
+            	pstmt.setString(i + 1, info[i]);
             }
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage()+"(Insert)");
+            System.out.println(e.getMessage() + "(Insert)");
         }
     }
 }

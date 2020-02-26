@@ -11,13 +11,13 @@ public class LogCreator {
 	private int numberFailed = 0;
 	private int numberSuccessful = 0;
 
-	public LogCreator(int totalRecord , int numberOfFailed , int numberOfSuccessful) {
+	public LogCreator(int totalRecord, int numberOfFailed, int numberOfSuccessful) {
 		numberRecord = totalRecord;
 		numberFailed = numberOfFailed;
 		numberSuccessful = numberOfSuccessful;
 	}
 	
-	public void createLog(String NewfileName , String savePath){
+	public void createLog(String NewfileName, String savePath){
 		Logger logger = Logger.getLogger(ChallengesSqlite.class.getName());
 		FileHandler fh = null;
 		try {
@@ -29,8 +29,8 @@ public class LogCreator {
 		}
 		logger.addHandler(fh);
 		fh.setFormatter(new SimpleFormatter());
-		logger.info("\nTotal Received: "+numberRecord
-				+"\nNumber of Failed: "+numberFailed
-				+"\nNumber of Successful: "+numberSuccessful);
+		logger.info("\nTotal Received: " + numberRecord
+				+"\nNumber of Failed: " + numberFailed
+				+"\nNumber of Successful: " + numberSuccessful);
 	}
 }
