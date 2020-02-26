@@ -28,23 +28,16 @@ public class ChallengesSqlite {
 	
 	public static void main(String[] args) throws IOException, SQLException {
 		
-		//Get read source file
-//		Reader reader = Files.newBufferedReader(Paths.get(sourceFilePath));
-		
-		//need to change
-//		CsvToBean<CsvUser> csvToBean = new CsvToBeanBuilder<CsvUser>(reader)
-//				.withType(CsvUser.class)
-//				.withIgnoreLeadingWhiteSpace(true)
-//				.build();
-//		
-//		//The source file will be extremely large, 
-//		//Use Iterator only read one bean at a time.
-//		Iterator<CsvUser> csvUserIterator = csvToBean.iterator();
-		
 		CSVReader reader = new CSVReader(new FileReader(sourceFilePath));
 		fileHeader = reader.readNext();
 		String [] nextLine;
-
+		
+		//Write all the bad records 
+		CsvCreator myCsvCreator = new CsvCreator(fileName,savePath,fileHeader);
+		
+		int totalOfRecord = 0;
+		int numberOfFailed = 0;
+		
 		while((nextLine=reader.readNext())!=null) {
 			if(! isEndLine(nextLine)) {
 				if(isBadRecord(nextLine)) {
@@ -58,11 +51,7 @@ public class ChallengesSqlite {
 		
 		
 		
-//		//Write all the bad records 
-//		CsvCreator myCsvCreator = new CsvCreator(fileName,savePath);
-//		
-//		int numberRecord = 0;
-//		int numberFailed = 0;
+
 //		
 //		//Create SQLite database
 //		SQLiteCreator my_sqlite = new SQLiteCreator(fileName,savePath);
@@ -95,8 +84,9 @@ public class ChallengesSqlite {
 	 * Get file name by given sourceFilePath
 	 */
 	private static String getFileName() {
-		//Get String -> "Entry Level Coding Challenge Page 2.csv"
-		String[] temp = sourceFilePath.split("/");
+		//Check it is MAC path or Windows Path
+		String cutter = sourceFilePath.lastIndexOf("/") != -1 ? "/":"\\";
+		String[] temp = sourceFilePath.split(cutter);
 		String fileName = temp[temp.length-1];
 		//Return String -> "Entry Level Coding Challenge Page 2"
 		return fileName.substring(0, fileName.length()-4);

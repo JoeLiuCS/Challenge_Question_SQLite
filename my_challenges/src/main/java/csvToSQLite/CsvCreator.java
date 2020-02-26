@@ -9,14 +9,15 @@ import com.opencsv.CSVWriter;
 
 public class CsvCreator {
 
-	final private static String[] header = {"A", "B", "C", "D","E","F","G","H","I","J"};
+	private String[] header;
 	private Writer writer;
 	private CSVWriter csvWriter;
 	
-	public CsvCreator(String NewfileName,String savePath) {
+	public CsvCreator(String newFileName,String savePath,String[] newHeader) {
+		header = newHeader;
 		//Create writer to store all the bad records 
 		try {
-			writer = Files.newBufferedWriter(Paths.get(savePath + NewfileName + "-bad.csv"));
+			writer = Files.newBufferedWriter(Paths.get(savePath + newFileName + "-bad.csv"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
