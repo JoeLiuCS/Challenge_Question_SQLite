@@ -64,7 +64,7 @@ Special case handling:
 (3) Read the file line by line
 
 	The CSV file can be bigger like 1GB or 20GB, and memory is limited.
-	Here has two options, using 'iterator' or 'line by line', I choose the second one.
+	Here has two options, using 'iterator' or 'read line by line', I choose the second one.
 
 (4) End line does not count
 
