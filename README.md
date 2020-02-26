@@ -11,9 +11,13 @@ This code works on reading CSV file, and it will generate three result files.
 The result files including:
 
 Good_result.db : This file saves all the good records from source CSV file. 
-				 Good records mean each column are match to the head with non-empty inputs.
+
+	Good records mean each column are match to the head with non-empty inputs.
+				 
 Bad_result.csv : This file saves all the bad records from source CSV file.
-				 Bad records mean inputs miss some colomn information, and they are not match to the head.
+
+	Bad records mean inputs miss some colomn information, and they are not match to the head.
+				 
 Journal.log : This file saves total of records, number of successful and number of failed.
 
 
@@ -24,13 +28,15 @@ Frist, when you run the code, it will ask you to type the source CSV file absolu
 Second, it will ask you an other absolute path for where you want to save the result files.
 
 For Example: 
+
 ---Please type absolute path from source files---
-For Example: /User/Source File/myFile.csv
-/Users/shuoqiaoliu/git/Challenge_Question_SQLite/my_challenges/src/main/resources/Entry Level Coding Challenge Page 2.csv
+
+/MyPath/resources/Entry Level Coding Challenge Page 2.csv
+
 ---Please type absolute path for saving files---
-For Example: /User/Download/
-/Users/shuoqiaoliu/git/Challenge_Question_SQLite/my_challenges/src/main/resources/ 
-Reading CSV File...
+
+/MyPath/resources/
+
 
 
 3. Approach, Design chioces, Assumptions
@@ -45,8 +51,11 @@ Special case handling:
 
 (1) Verify Qualifiable Rows
 	Each row has different information, and it is not always qualify. Here has three different cases.
+	
 	In case row' length < head' length, the row misses some information, and it is not qualify
+	
 	In case row' length == head' length, the row needs to check each column information is not empty, if it has empty column, it is not qualify.
+	
 	In case row' length > head' length, the row will ignore the extra column, and it goes back to == case to check it has empty column or not.
 
 (2) Create Dynamic Header
