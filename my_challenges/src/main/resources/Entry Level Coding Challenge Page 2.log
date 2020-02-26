@@ -1,0 +1,5 @@
+Feb 26, 2020 2:31:34 PM csvToSQLite.LogCreator createLog
+INFO: 
+Total Received: 6001
+Number of Failed: 1131
+Number of Successful: 4870
