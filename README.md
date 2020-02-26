@@ -62,12 +62,12 @@ Special case handling:
 
 	The head' columns is not fixed, and it based on given source CSV file.
 
-(3) Read the file line by line
+(3) Handle large source CSV file
 
 	The CSV file can be bigger like 1GB or 20GB, and memory is limited.
 	Here has two options, using 'iterator' or 'read line by line', I choose the second one.
 
-(4) End line does not count
+(4) End line with empty does not count to result
 
 	Read CSV file has end line which is length == 1 and empty.
 	My result file will not include this line.
