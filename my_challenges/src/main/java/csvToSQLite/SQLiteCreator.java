@@ -1,4 +1,4 @@
-package my_challenges;
+package csvToSQLite;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

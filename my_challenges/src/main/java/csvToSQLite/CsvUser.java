@@ -1,11 +1,13 @@
-package my_challenges;
+package csvToSQLite;
 import com.opencsv.bean.CsvBindByName;
 /**
  * Header : A, B, C, D, E, F, G, H, I, J
  * @author Shuoqiao liu (Joe)
  *
  */
+
 public class CsvUser {
+
 	@CsvBindByName(column = "A")
 	private String A;
 	

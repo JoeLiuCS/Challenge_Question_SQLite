@@ -1,4 +1,4 @@
-package my_challenges;
+package csvToSQLite;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
