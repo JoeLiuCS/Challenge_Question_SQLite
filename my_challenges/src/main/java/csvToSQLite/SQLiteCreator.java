@@ -7,6 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 
+/**
+ * The Class use for creating a SQLite database
+ * @author shuoqiaoliu
+ *
+ */
 public class SQLiteCreator {
 	
 	private String savePath;
@@ -38,7 +43,7 @@ public class SQLiteCreator {
         }
 	}
 	
-    public void insert(String[] info) {
+    public void insertToDatabase(String[] info) {
     	String[] unknowValues = new String[header.length];
     	Arrays.fill(unknowValues, "?");
     	

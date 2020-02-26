@@ -5,7 +5,11 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.opencsv.CSVReader;
-
+/**
+ * This class use for running the code.
+ * @author shuoqiaoliu
+ *
+ */
 public class ChallengesSqlite {
 	
 	private static String[] fileHeader;
@@ -44,8 +48,9 @@ public class ChallengesSqlite {
 		
 		int totalOfRecord = 0;
 		int numberOfFailed = 0;
+		int numberOfSuccessful = 0;
 		
-		System.out.println("Code is runging...");
+		System.out.println("Reading CSV File...");
 		while((nextLine=reader.readNext())!=null) {
 			if(! isEndLine(nextLine)) {
 				if(isBadRecord(nextLine)) {
@@ -53,7 +58,8 @@ public class ChallengesSqlite {
 					numberOfFailed += 1;
 				}
 				else {
-					mySQLite.insert(nextLine);
+					mySQLite.insertToDatabase(nextLine);
+					numberOfSuccessful += 1;
 				}
 				totalOfRecord += 1;
 			}
@@ -61,30 +67,34 @@ public class ChallengesSqlite {
 		
 		myCsvCreator.closeCsv();
 		reader.close();
-		System.out.println("Finished!");
 		
-		int numberOfSuccessful = totalOfRecord - numberOfFailed;
 		LogCreator lgCreator = new LogCreator(totalOfRecord, numberOfFailed, numberOfSuccessful);
 		lgCreator.createLog(fileName, savePath);
-				
+		
+		System.out.println("Finished!");
 	}
 	
 	private static String getFileName() {
+		
 		//Check it is MAC path or Windows Path.
 		String cutter = sourceFilePath.lastIndexOf("/") != -1? "/":"\\"+"\\";
 		String[] temp = sourceFilePath.split(cutter);
 		String fileName = temp[temp.length-1];
+		
 		//Return String -> "File Name".
 		return fileName.substring(0 , fileName.length()-4);
 	}
 	
 	private static boolean isBadRecord(String[] line) {
-		boolean answer = false;
+		
 		//If record's number of column is not equal to header's number of column, it is bad record.
-		if(line.length != fileHeader.length) return answer;
-		//Check each column is not empty.
-		for(String column:line) {
-			if(column.isEmpty()) {
+		if(line.length < fileHeader.length) return true;
+		
+		boolean answer = false;
+		
+		//Check each column is not empty. (Match to header)
+		for(int i=0; i<fileHeader.length; i++) {
+			if(line[i].isEmpty()) {
 				answer = true;
 				break;
 			}

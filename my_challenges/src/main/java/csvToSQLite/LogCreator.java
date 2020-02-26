@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
+/**
+ * The Class use for creating a Log file to save the journal.
+ * @author shuoqiaoliu
+ *
+ */
 public class LogCreator {
 	
 	private int numberRecord = 0;
