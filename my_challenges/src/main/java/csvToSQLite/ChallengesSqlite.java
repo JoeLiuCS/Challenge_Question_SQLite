@@ -1,17 +1,10 @@
 package csvToSQLite;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Scanner;
 
-import com.opencsv.CSVIterator;
 import com.opencsv.CSVReader;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 
 public class ChallengesSqlite {
 	
@@ -68,6 +61,7 @@ public class ChallengesSqlite {
 		}
 		
 		myCsvCreator.closeCsv();
+		reader.close();
 		
 		int numberOfSuccessful = totalOfRecord - numberOfFailed;
 		LogCreator lgCreator = new LogCreator(totalOfRecord,numberOfFailed,numberOfSuccessful);

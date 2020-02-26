@@ -49,7 +49,7 @@ public class SQLiteCreator {
         							+")";
  
         try (Connection conn = DriverManager.getConnection(my_database_url);
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
         	// Only record the information that match to header.
         	// Extra Columns will ignore.
             for(int i=0;i<header.length;i++) { 
