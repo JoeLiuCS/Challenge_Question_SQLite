@@ -1,7 +1,8 @@
 # Challenge_Question_SQLite
 csvToSQLite
 
-Short 6 mins explaination
+Short 6 mins video for explaination and Runing demo code
+
 Link: https://youtu.be/J5_vQmtyXmI
 
 1. Summary
