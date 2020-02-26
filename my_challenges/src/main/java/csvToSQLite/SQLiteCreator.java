@@ -5,37 +5,30 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 public class SQLiteCreator {
 	
 	private String savePath;
 	private String fileName;
 	private String my_database_url;
+	private String[] header;
 	
-	public SQLiteCreator(String newFileName,String path){
+	public SQLiteCreator(String newFileName , String path , String[] newHeader){
 		fileName = newFileName;
 		savePath = path;
+		header = newHeader;
 		my_database_url = "jdbc:sqlite:" + this.savePath + this.fileName + ".db";;
 	}
 	
 	public void createNewDatabase() {
 		//Here does not set primary key because the table has duplicate value
-		String my_table = "CREATE TABLE mytable " +
-
-		"(A TEXT NOT NULL," +
-		" B TEXT NOT NULL, " +
-		" C TEXT NOT NULL, " +
-		" D TEXT NOT NULL, " +
-		" E TEXT NOT NULL, " +
-		" F TEXT NOT NULL, " +
-		" G TEXT NOT NULL, " +
-		" H TEXT NOT NULL, " +
-		" I TEXT NOT NULL, " +
-		" J TEXT NOT NULL) " ;
+		String my_table = "CREATE TABLE mytable (" 
+							+ String.join(" TEXT NOT NULL, ", header) 
+								+ " TEXT NOT NULL) ";
 		
 		try (Connection conn = DriverManager.getConnection(my_database_url);
 				Statement stmt = conn.createStatement()) {
-            //create new table
 			stmt.execute(my_table);
 			stmt.close();
 			conn.close();
@@ -45,13 +38,21 @@ public class SQLiteCreator {
         }
 	}
 	
-    
     public void insert(String[] info) {
-        String sql = "INSERT INTO mytable(A,B,C,D,E,F,G,H,I,J) VALUES(?,?,?,?,?,?,?,?,?,?)";
+    	String[] unknowValues = new String[header.length];
+    	Arrays.fill(unknowValues, "?");
+    	
+        String sql = "INSERT INTO mytable("
+        				+String.join(",", header)
+        					+") VALUES("
+        						+String.join(",", unknowValues)
+        							+")";
  
         try (Connection conn = DriverManager.getConnection(my_database_url);
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            for(int i=0;i<info.length;i++) {
+        	// Only record the information that match to header.
+        	// Extra Columns will ignore.
+            for(int i=0;i<header.length;i++) { 
             	pstmt.setString(i+1, info[i]);
             }
             pstmt.executeUpdate();
@@ -59,7 +60,4 @@ public class SQLiteCreator {
             System.out.println(e.getMessage()+"(Insert)");
         }
     }
-	
-
-
 }

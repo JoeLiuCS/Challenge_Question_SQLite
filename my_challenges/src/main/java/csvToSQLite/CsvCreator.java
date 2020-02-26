@@ -6,16 +6,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import com.opencsv.CSVWriter;
-
+/**
+ * The Class use for creating a CSV file to save the bad records.
+ * @author shuoqiaoliu
+ *
+ */
 public class CsvCreator {
 
 	private String[] header;
 	private Writer writer;
 	private CSVWriter csvWriter;
 	
-	public CsvCreator(String newFileName,String savePath,String[] newHeader) {
+	public CsvCreator(String newFileName , String savePath , String[] newHeader) {
 		header = newHeader;
-		//Create writer to store all the bad records 
 		try {
 			writer = Files.newBufferedWriter(Paths.get(savePath + newFileName + "-bad.csv"));
 		} catch (IOException e) {
