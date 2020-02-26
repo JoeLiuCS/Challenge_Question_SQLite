@@ -50,7 +50,6 @@ Because the code only read source file for once, the time complexity should be l
 Special case handling:
 
 (1) Verify Qualifiable Rows
-	Each row has different information, and it is not always qualify. Here has three different cases.
 	
 	In case row' length < head' length, the row misses some information, and it is not qualify
 	
@@ -59,13 +58,16 @@ Special case handling:
 	In case row' length > head' length, the row will ignore the extra column, and it goes back to == case to check it has empty column or not.
 
 (2) Create Dynamic Header
+
 	The head' columns is not fixed, and it based on given source CSV file.
 
 (3) Read the file line by line
+
 	The CSV file can be bigger like 1GB or 20GB, and memory is limited.
 	Here has two options, using 'iterator' or 'line by line', I choose the second one.
 
 (4) End line does not count
+
 	Read CSV file has end line which is length == 1 and empty.
 	My result file will not include this line.
 
